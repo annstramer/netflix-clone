@@ -1,18 +1,21 @@
 import React, { useEffect, useRef, useState } from 'react'
 import './TitleCards.css'
 import cards_data from '../../assets/cards/Cards_data'
+import { Link } from 'react-router-dom';
 
 
 const TitleCards = ({title, category}) => {
 
   const [apiData, setApiData] = useState([]);
   const cardsRef = useRef();
+  const bearer = import.meta.env.VITE_TMDB_API_READ_ACCESS_TOKEN
 
   const options = {
     method: 'GET',
     headers: {
       accept: 'application/json',
-      Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI0NjMzZTFiNmJkNDk3OGNjMWNmMjRhODdjNTBlN2QwNSIsIm5iZiI6MTc1NzYwNjIwNi43NzYsInN1YiI6IjY4YzJmMTNlZTViMGM2ZWI3ZDk0OTNkZiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.J9Y8Fp1jRkE1itw2Apq-u8qaw1e9t7l1cSGmkRup1bQ'
+      Authorization: `Bearer ${bearer}`
+      //Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI0NjMzZTFiNmJkNDk3OGNjMWNmMjRhODdjNTBlN2QwNSIsIm5iZiI6MTc1NzYwNjIwNi43NzYsInN1YiI6IjY4YzJmMTNlZTViMGM2ZWI3ZDk0OTNkZiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.J9Y8Fp1jRkE1itw2Apq-u8qaw1e9t7l1cSGmkRup1bQ'
     }
   };
 
@@ -29,15 +32,16 @@ const TitleCards = ({title, category}) => {
     cardsRef.current.addEventListener('wheel', handleWheel);
   },[])
 
+
   return (
     <div className='title-cards'>
       <h2>{title ? title : "Popular on Netflix"}</h2>
       <div className="card-list" ref={cardsRef}>
         {apiData.map((card, index)=>{
-          return <div className="card" key={index}>
+          return <Link to={`/player/${card.id}`} className="card" key={index}>
             <img src={`https://image.tmdb.org/t/p/w500` + card.backdrop_path} alt="" />
             <p>{card.original_title}</p>
-          </div>
+          </Link>
         })}
       </div>
     </div>
